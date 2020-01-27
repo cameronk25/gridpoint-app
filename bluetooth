@@ -1,0 +1,49 @@
+import wx
+import bluetooth
+import tkinter
+import sys
+
+#Finding Bluetooth Device
+def FindBluetooth():
+    target_name = "My Phone"
+    target_address = None
+
+    nearby_devices = bluetooth.discover_devices()
+
+    for bdaddr in nearby_devices:
+        print("Found device ", target_name, ".")
+        
+    if target_address is not None:
+        print ("found target bluetooth device with address ", target_address)
+        s=nearby_devices( target_name )
+        s.connect((HOST, PORT))
+    
+    else:
+        print ("could not find target bluetooth device nearby")
+   
+#GUI with Button   
+class MyFrame(wx.Frame):   
+    def __init__(self):
+        super().__init__(parent=None, title='Gridpoint')
+        panel = wx.Panel(self)        
+        my_sizer = wx.BoxSizer(wx.VERTICAL)                
+        my_btn = wx.Button(panel, label='Connect Bluetooth')
+        my_btn.Bind(wx.EVT_BUTTON, self.on_press)
+        my_sizer.Add(my_btn, 0, wx.ALL | wx.CENTER, 10)    
+        panel.SetSizer(my_sizer)
+        self.Show()
+#Button Script
+    def on_press(self, event):
+        print("Gridpoint App")
+        FindBluetooth()
+        if FindBluetooth() is None:
+            super().__init__(parent=None, title='No Device Found')
+            panel = wx.Panel(self)
+            self.Show()
+
+
+    
+if __name__ == '__main__':
+    app = wx.App()
+    frame = MyFrame()
+    app.MainLoop()
